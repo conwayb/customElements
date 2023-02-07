@@ -1,0 +1,36 @@
+<template id='coolButton'>
+  <style>
+    :host {
+      display: inline-block;
+      margin: 10px;
+    }
+    button {
+      width: 100px;
+    }
+  </style>
+  <button><slot></slot></button>
+</template>
+
+<script type="module">
+
+  import { setState } from '/state'
+
+  customElements.define('cool-button', class extends HTMLElement {
+    constructor() {
+      super();
+      this.addEventListener('click', () => {
+        let id = this.parentNode.host.getAttribute('data-id')
+        Array.from(document.querySelectorAll('.engaged')).forEach((el) => {
+          el.classList.remove('engaged')
+        });
+        this.parentNode.host.classList.toggle("engaged");
+        setState('selected-user', id)
+        history.replaceState({id:id}, window.title, id)
+      })
+    }
+    connectedCallback() {
+      this.attachShadow({mode: 'open'});
+      this.shadowRoot.append(coolButton.content.cloneNode(true)); // (*)
+    }
+  });
+</script>

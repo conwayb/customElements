@@ -1,0 +1,77 @@
+<template id='userCard'>
+  <style>
+    :host {
+      background-color: #345979;
+      display: inline-block;
+      width: 300px;
+      text-align: center;
+      font-size: 1.35em;
+      padding: 10px;
+      color: white;
+      margin: 10px;
+    }
+    :host(.engaged) {
+      background-color: #333;
+    }
+    .name: {
+      text-transform: uppercase;
+      font-size: 1.1em;
+      font-weight: bold;
+    }
+    .url {
+      font-size: 0.75em;
+    }
+  </style>
+  <div class='name'>Name:
+    <slot name='inner'></slot>
+    <slot name="name"></slot>
+  </div>
+  <div class='url'>Url:
+    <slot name="url"></slot>
+  </div>
+  <cool-button>Click</cool-button>
+</template>
+
+<script type='module'>
+
+  import { fetchUsers, useForLoop } from '/main';
+  import { state } from '/state';
+
+  customElements.define('user-card', class extends HTMLElement {
+
+    static get observedAttributes() {
+      return ['data-for'];
+    }
+
+    connectedCallback() {
+      setTimeout(() => {
+        if (state['users'] == null) {
+          fetchUsers().then(() => {
+            useForLoop(this, state['users'])
+          })
+        }
+      })
+    }
+
+    attributeChangedCallback(name, oldValue, newValue) {
+      if (name == 'data-for') {
+        setTimeout(() => {
+          try {
+            if (this.parentNode.getAttribute('data-if')) {
+              const condition = this.parentNode.getAttribute('data-if')
+              if (state[condition] == undefined || state[condition] == null) {
+                return
+              }
+            }
+            this.attachShadow({mode: 'open'});
+            this.shadowRoot.append(userCard.content.cloneNode(true));
+          }
+          catch (e) {
+            console.log(e)
+          }
+        })
+    }
+  }
+
+  });
+</script>

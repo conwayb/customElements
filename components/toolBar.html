@@ -1,0 +1,39 @@
+<template id="toolBar">
+  <style>
+    :host {
+      background-color: #333;
+      width: 100%;
+      color: white;
+      margin: 10px 0px;
+      display: inline-block;
+    }
+    .toolbar {
+      padding: 10px;
+      display: grid;
+      grid-template-columns: 100px auto;
+    }
+    .logo {
+      background-image: url('/pokemon.png');
+      background-size: 75px;
+      background-position-y: 15px;
+      background-repeat: no-repeat;
+    }
+  </style>
+  <div class='toolbar'>
+    <div class='logo'></div>
+    <div>
+      <h1>
+        Welcome to the custom elements demo
+      </h1>
+    </div>
+  </div>
+</template>
+
+<script>
+customElements.define('tool-bar', class extends HTMLElement {
+  connectedCallback() {
+    this.attachShadow({mode: 'open'});
+    this.shadowRoot.append(toolBar.content.cloneNode(true)); // (*)
+  }
+});
+</script>

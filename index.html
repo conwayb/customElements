@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta name="theme-color" content="#353535">
+    <meta name="application-name" content="templates">
+
+    <link rel="icon" href="/favicon.ico">
+    <title>Templates and Elements</title>
+		<link href="/styles/main.css" rel="stylesheet">
+  </head>
+  <body>
+		<!-- import component templates -->
+		{{> index }}
+
+
+    <div id="app">
+
+    	<tool-bar></tool-bar>
+
+     <div class='wrapper'>
+
+
+ 			<div class='sidebar' data-if="users">
+				<user-card data-for="users">
+					<span data-name="name" slot="name"></span>
+					<span data-url="url" slot="height"></span>
+				</user-card>
+		  </div>
+
+			<div class='detail'>
+				<detail-pane data-bind="selected-user" data-selected-user=""></detail-pane>
+		  </div>
+
+		</div>
+
+	</div>
+
+  </body>
+
+</html>

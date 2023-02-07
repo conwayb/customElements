@@ -1,0 +1,35 @@
+body {
+  height: 100vh;
+  width: 100%;
+  margin: 0;
+  background: lightgray;
+}
+
+.app {
+  overflow-y: hidden;
+  max-height: 99vh;
+}
+.hidden {
+  display: none;
+}
+
+.wrapper {
+  display: grid;
+  grid-template-columns: 340px auto;
+}
+
+.detail {
+  margin: 10px;
+  margin-right: 20px;
+  background: white;
+  display: grid;
+  width: 98%;
+  height: 85vh;
+}
+
+.sidebar {
+  overflow-y: scroll;
+  height: 85vh;
+  padding-bottom: 50px;
+  position: relative;
+}

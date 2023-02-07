@@ -1,0 +1,99 @@
+<template id="detailPane">
+  <style>
+    :host {
+      text-align: center;
+
+    }
+    :host > div {
+      padding: 20px;
+    }
+    img {
+      width: 300px;
+      border-radius: 50%;
+      background: black;
+      padding: 75px;
+      margin-bottom: 50px;
+    }
+    h3 {
+      font-size: 3em;
+      text-transform: uppercase;
+    }
+  </style>
+  <div class='detail--component'>
+    <h3 data-attr="name" class='name'></h3>
+    <div data-attr="image" class='image'></div>
+    <div data-attr="url" class='url'></div>
+  </div>
+</template>
+
+<script type='module'>
+
+import { state } from '/state';
+
+customElements.define('detail-pane', class extends HTMLElement {
+
+  connectedCallback() {
+    this.attachShadow({mode: 'open'});
+    this.shadowRoot.append(detailPane.content.cloneNode(true));
+    // select the right item
+    setTimeout(() => {
+      let path = window.location.href.substring(window.location.href.lastIndexOf('/') + 1)
+      if (path.length && Number(path) != NaN) {
+        path = path;
+      }
+      else {
+        path = document.querySelectorAll("[data-id]")[0].getAttribute('data-id')
+      }
+      this.renderState(path)
+      // probably not the right place for this
+      let card = document.querySelector(`[data-id="${path}"]`)
+      card.classList.toggle('engaged')
+      card.scrollIntoView();
+        history.replaceState({id:path}, window.title, path)
+    }, 200)
+  }
+
+  static get observedAttributes() {
+    return ['data-bind',  'data-selected-user'];
+  }
+
+  renderState(selectedUser) {
+    if (state['users'] == null) return
+
+    let user = state['users'].find((user) => { return user['id'] == selectedUser })
+    const fragment = new DocumentFragment()
+    for (const [k,v] of Object.entries(user)) {
+      let inner = this.shadowRoot.querySelector(`[data-attr=${k}]`)
+      if (inner) {
+        if (k == 'url') {
+          let alink = document.createElement('a')
+          alink.text = v;
+          alink.href = v;
+          alink.traget = '_blank';
+          inner.innerHTML = ''
+          inner.append(alink)
+        }
+        if (k == 'image') {
+          let img = document.createElement('img')
+          img.setAttribute('src', v)
+          inner.innerHTML = ''
+
+          inner.append(img)
+        }
+        if (k == 'name') {
+          inner.textContent = v
+        }
+      }
+    }
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (name == 'data-selected-user') {
+      this.renderState(newValue)
+    }
+
+  }
+
+
+});
+</script>
